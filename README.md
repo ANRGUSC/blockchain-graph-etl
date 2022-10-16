@@ -1,6 +1,14 @@
 # blockchain-graph-etl
 
 ```
-pip3 install neo4j
-python3 helloworld.py
+cd flask-server
+python3 server.py
+cd client
+npm run start
+
+For backend
+localhost:8000/test
+
+For react
+localhost:3000 
 ```
