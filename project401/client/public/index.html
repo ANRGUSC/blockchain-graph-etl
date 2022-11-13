@@ -24,6 +24,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <link rel="stylesheet" href="http://cdn.graphalchemist.com/alchemy.min.css"/>
     <title>React App</title>
   </head>
   <body>
@@ -39,5 +40,15 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <div class="alchemy" id="alchemy"></div>
+
+    <script src="http://cdn.graphalchemist.com/alchemy.min.js"></script>
+    <script type="text/javascript" src="http://cdn.graphalchemist.com/alchemy.0.2.min.js">
+          var config = {
+              dataSource: 'graph.json',
+              };
+
+          alchemy = new Alchemy(config)
+      </script>
   </body>
 </html>
