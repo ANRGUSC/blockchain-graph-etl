@@ -1,5 +1,5 @@
 from neo4j import GraphDatabase
-
+import json
 
 class Transaction:
     def __init__(self, uri, user, password):
@@ -31,16 +31,69 @@ class Transaction:
             transactions = session.execute_read(self._get_transactions)
             # for record in transactions:
             #     print(record["n"])
+            return transactions
 
     @staticmethod
     def _get_transactions(tx):
         print("get transactions")
         result = tx.run("""
-            MATCH (n)-[r]->(m)
-            RETURN n, r, m
-        """)
+                MATCH (n)-[r]->(m)
+                RETURN n, r, m
+            """)
         peek = result.peek()
         print(peek["n"])
         print(peek["m"])
         print(peek["r"])
-        return result.values()
+
+        print("test########")
+        insert_query_guest = '''
+            MATCH (a:From_address)
+            WITH collect({add: a.add, nodeType:'from'}) AS nodes RETURN nodes
+            '''
+
+        result = tx.run(insert_query_guest)
+        for record in result:
+            guest_node = json.dumps(dict(record))
+            break
+
+        guest_nodes = str(guest_node)[1:][:-2]
+
+        insert_query_guest = '''
+            MATCH (a:From_address)-[r:SEND_TO]->(b:To_address)
+            WITH collect({source: a.add, target: b.add, value:r.value}) AS edges RETURN edges
+            '''
+        result = tx.run(insert_query_guest)
+        for record in result:
+            create_guest_edge = json.dumps(dict(record))
+            break
+
+        guest_edges = str(create_guest_edge)[1:]
+
+        insert_query_guest = '''
+            MATCH (a:To_address)
+            WITH collect({add: a.add, nodeType:'to'}) AS nodes RETURN nodes
+            '''
+
+        result = tx.run(insert_query_guest)
+        for record in result:
+            create_event_node = json.dumps(record['nodes'])
+            break
+
+        event_node = str(create_event_node) + ']'
+
+        graphjson = str(guest_nodes) + ', ' + str(event_node) + ',' + str(guest_edges)
+
+        print(graphjson)
+
+        return graphjson
+
+    @staticmethod
+    def get_trans_test(tx):
+        print("get transactions")
+        result = tx.run("""
+                MATCH (n)-[r]->(m)
+                RETURN n, r, m
+                LIMIT 100
+            """)
+        return result
+
