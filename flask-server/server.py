@@ -93,12 +93,17 @@ def get_graph():
     rels = []
     i = 0
     for record in results:
-        print("from: " + record["from_add"]._properties["add"])
+        print("--RECORD--")
+        print(record)
+        #print("from: " + record["from_add"]._properties["add"])
         nodes.append({"title": record["from_add"]._properties["add"], "label": "from_add"})
         target = i
         i += 1
         for name in record["to_add"]:
-            print("to: " + record["to_add"]._properties["add"])
+            # print("to: " + record["to_add"]._properties["add"])
+            print("---VALUES---")
+            print(record["values"])
+            print(record["values"]._properties["value"])
             actor = {"title": record["to_add"]._properties["add"], "label": "to_add"}
             try:
                 source = nodes.index(actor)
@@ -106,7 +111,7 @@ def get_graph():
                 nodes.append(actor)
                 source = i
                 i += 1
-            rels.append({"source": source, "target": target})
+            rels.append({"source": source, "value": record["values"]._properties["value"] , "target": target})
     return Response(dumps({"nodes": nodes, "links": rels}),
                     mimetype="application/json")
 
@@ -129,12 +134,17 @@ def cypher_func():
         rels = []
         i = 0
         for record in results:
-            print("from: " + record["from_add"]._properties["add"])
+            print("--RECORD--")
+            print(record)
+            #print("from: " + record["from_add"]._properties["add"])
             nodes.append({"title": record["from_add"]._properties["add"], "label": "from_add"})
             target = i
             i += 1
             for name in record["to_add"]:
-                print("to: " + record["to_add"]._properties["add"])
+                #print("to: " + record["to_add"]._properties["add"])
+                print("---VALUES---")
+                print(record["values"])
+                print(record["values"]._properties["value"])
                 actor = {"title": record["to_add"]._properties["add"], "label": "to_add"}
                 try:
                     source = nodes.index(actor)
@@ -142,8 +152,8 @@ def cypher_func():
                     nodes.append(actor)
                     source = i
                     i += 1
-                rels.append({"source": source, "target": target})
-        return Response(dumps({"nodes": nodes, "links": rels}),
+                rels.append({"source": source, "value": record["values"]._properties["value"] , "target": target})
+        return Response(dumps({"nodes": nodes,"links": rels}),
                         mimetype="application/json")
     return '''
               <form method="POST">
