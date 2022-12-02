@@ -156,10 +156,11 @@ def cypher_func():
         return Response(dumps({"nodes": nodes,"links": rels}),
                         mimetype="application/json")
     return '''
-              <form method="POST">
-                  <div><label>Cypher: <input type="text" name="statement"></label></div>
-                  <input type="submit" value="Submit">
-              </form>'''
+                <form method="POST">
+              <div><label>Cypher: <textarea name="statement" rows="4" cols="50"></textarea></label></div>
+              <p></p >
+              <input type="submit" value="Submit">
+            </form>'''
 
 
 
