@@ -24,6 +24,9 @@ class Transaction:
                         "MERGE (from_address:From_address {add: csvLine.from_address}) "
                         "MERGE (to_address:To_address {add: csvLine.to_address }) "
                         "MERGE (from_address)-[rel:SEND_TO {value: csvLine.value}]->(to_address)")
+
+
+
         return result.peek()
 
     def read_transactions(self):
