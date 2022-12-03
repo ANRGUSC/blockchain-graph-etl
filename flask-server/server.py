@@ -2,6 +2,7 @@ from json import dumps
 from flask_cors import CORS
 import logging
 import os
+from models import Transaction
 
 from flask import (
     Flask,
@@ -37,8 +38,27 @@ def get_db():
             g.neo4j_db = driver.session()
     return g.neo4j_db
 
+@app.route("/load")
+def load_func():
+    uri1 = "neo4j+s://34a4cf44.databases.neo4j.io"
+    user1 = "neo4j"
+    password1 = "Eds0XFkwVJGVvRuE8U9D907u1KQiLWVfj14L6ynD7iA"
+    trans = Transaction(uri1, user1, password1)
+    trans.load_csv()
+    trans.close()
+    return '''
+                  load csv successfully'''
 
-@app.route("/graph")
+# @app.route("/transactions")
+# def transaction_func():
+#     uri1 = "neo4j+s://34a4cf44.databases.neo4j.io"
+#     user1 = "neo4j"
+#     password1 = "Eds0XFkwVJGVvRuE8U9D907u1KQiLWVfj14L6ynD7iA"
+#     trans = Transaction(uri1, user1, password1)
+#     return trans.read_transactions()
+
+
+@app.route("/transactions")
 def get_graph():
     print("get_graph() func")
     def work(tx, limit):
@@ -123,11 +143,6 @@ def cypher_func():
               <p></p >
               <input type="submit" value="Submit">
             </form>'''
-
-
-
-
-
 
 
 

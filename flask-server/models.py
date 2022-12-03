@@ -10,6 +10,18 @@ class Transaction:
         print("close")
         self.driver.close()
 
+    def pass_cypher(self, cypher):
+        with self.driver.session() as session:
+            greeting = session.execute_write(self._pass_cypher, cypher)
+            return greeting
+
+    @staticmethod
+    def _pass_cypher(tx, cypher):
+        print(cypher)
+        result = tx.run(cypher)
+        return result.peek()
+
+
     def load_csv(self):
         print("load csv")
         with self.driver.session() as session:
@@ -99,4 +111,14 @@ class Transaction:
                 LIMIT 100
             """)
         return result
+
+    def get_from_address(self, fromAddress):
+        with self.driver.session() as session:
+            transactions = session.execute_read(self._get_from_address, fromAddress)
+
+    @staticmethod
+    def _get_from_address(tx, fromAddress):
+        result = tx.run("MATCH (From_address {add: $fromAddress})-[r:SEND_TO]->(To_address) "
+                        "RETURN r.value, To_address.add", fromAddress=fromAddress)
+        return result.values()
 
