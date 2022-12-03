@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>neovis_test</title>
+    <script src="https://unpkg.com/neovis.js@2.0.2"></script>
+</head>
+ <script type="text/javascript">
+        var viz;
+        function draw() {
+            console.log("draw function");
+            var config = fetch("http://localhost:8000/graph");
+            viz = new NeoVis.default(config);
+            viz.render();
+        }
+    </script>
+    <body onload="draw()">
+        <div id="neovis_test"></div>
+    </body>
+</html>
